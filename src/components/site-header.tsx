@@ -76,16 +76,29 @@ export function SiteHeader() {
       {open && (
         <div className="border-t border-border/60 bg-background md:hidden">
           <div className="mx-auto flex max-w-7xl flex-col gap-1 px-4 py-3">
-            {nav.map((n) => (
-              <Link
-                key={n.to}
-                to={n.to}
-                onClick={() => setOpen(false)}
-                className="rounded-md px-3 py-2 text-sm font-medium hover:bg-muted"
-              >
-                {n.label}
-              </Link>
-            ))}
+            {nav.map((n) =>
+              n.href ? (
+                <a
+                  key={n.label}
+                  href={n.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => setOpen(false)}
+                  className="rounded-md px-3 py-2 text-sm font-medium hover:bg-muted"
+                >
+                  {n.label}
+                </a>
+              ) : (
+                <Link
+                  key={n.label}
+                  to={n.to}
+                  onClick={() => setOpen(false)}
+                  className="rounded-md px-3 py-2 text-sm font-medium hover:bg-muted"
+                >
+                  {n.label}
+                </Link>
+              )
+            )}
             <Button asChild variant="outline" className="mt-2">
               <Link to="/contact" onClick={() => setOpen(false)}>Get a Quote</Link>
             </Button>
