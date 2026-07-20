@@ -39,7 +39,7 @@ export function SiteFooter() {
         <div>
           <h4 className="mb-4 text-sm font-semibold uppercase tracking-wider text-primary-foreground/60">Contact</h4>
           <ul className="space-y-3 text-sm text-primary-foreground/80">
-            <li className="flex items-start gap-2"><MapPin className="mt-0.5 h-4 w-4 text-accent" /> F-7 Markaz, Islamabad, Pakistan</li>
+            <li className="flex items-start gap-2"><MapPin className="mt-0.5 h-4 w-4 text-accent" /> Blue Area, Islamabad, Pakistan</li>
             <li className="flex items-start gap-2"><Phone className="mt-0.5 h-4 w-4 text-accent" /> +92 51 000 0000</li>
             <li className="flex items-start gap-2"><Mail className="mt-0.5 h-4 w-4 text-accent" /> hello@orcabposervices.com</li>
           </ul>

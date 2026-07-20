@@ -61,12 +61,18 @@ function HomePage() {
               ORCA BPO is Islamabad's trusted business process outsourcing partner — delivering 24/7 customer support,
               call center, back-office and digital marketing services to 50+ global clients across the US, UK and EU.
             </p>
+            <div className="mt-6 inline-flex items-center gap-2 text-sm text-primary-foreground/80">
+              <span className="h-1.5 w-1.5 rounded-full bg-accent" />
+              Based in Blue Area, Islamabad
+            </div>
             <div className="mt-8 flex flex-wrap gap-3">
               <Button asChild size="lg" className="bg-gradient-accent text-accent-foreground shadow-glow hover:opacity-90">
-                <Link to="/contact">Get a Quote <ArrowRight className="ml-2 h-4 w-4" /></Link>
+                <a href="https://orcabposervices.com" target="_blank" rel="noopener noreferrer">
+                  Get a Consultation <ArrowRight className="ml-2 h-4 w-4" />
+                </a>
               </Button>
               <Button asChild size="lg" variant="outline" className="border-primary-foreground/30 bg-transparent text-primary-foreground hover:bg-primary-foreground/10">
-                <Link to="/services">Explore Services</Link>
+                <Link to="/contact">Get a Quote</Link>
               </Button>
             </div>
           </div>
@@ -217,10 +223,10 @@ function HomePage() {
             </p>
             <div className="relative mt-8 flex flex-wrap justify-center gap-3">
               <Button asChild size="lg" className="bg-gradient-accent text-accent-foreground shadow-glow hover:opacity-90">
-                <Link to="/contact">Get a Free Quote</Link>
+                <a href="https://orcabposervices.com" target="_blank" rel="noopener noreferrer">Get a Consultation</a>
               </Button>
               <Button asChild size="lg" variant="outline" className="border-primary-foreground/30 bg-transparent text-primary-foreground hover:bg-primary-foreground/10">
-                <Link to="/services">Explore Services</Link>
+                <Link to="/contact">Get a Free Quote</Link>
               </Button>
             </div>
           </div>

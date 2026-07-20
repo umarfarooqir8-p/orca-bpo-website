@@ -45,6 +45,13 @@ function ContactPage() {
           <p className="mt-5 max-w-2xl text-primary-foreground/80">
             Tell us a bit about your business and we'll get back within one working day with a tailored proposal.
           </p>
+          <div className="mt-8 flex flex-wrap gap-3">
+            <Button asChild size="lg" className="bg-gradient-accent text-accent-foreground shadow-glow hover:opacity-90">
+              <a href="https://orcabposervices.com" target="_blank" rel="noopener noreferrer">
+                Get a Consultation
+              </a>
+            </Button>
+          </div>
         </div>
       </section>
 
@@ -54,7 +61,7 @@ function ContactPage() {
             <h2 className="font-display text-2xl font-semibold">Reach us directly</h2>
             <div className="mt-6 space-y-6">
               {[
-                { icon: MapPin, title: "Head Office", body: "F-7 Markaz, Islamabad, Pakistan" },
+                { icon: MapPin, title: "Head Office", body: "Blue Area, Islamabad, Pakistan" },
                 { icon: Phone, title: "Phone", body: "+92 51 000 0000" },
                 { icon: Mail, title: "Email", body: "hello@orcabposervices.com" },
                 { icon: Clock, title: "Hours", body: "24/7 Operations · Sales Mon-Fri 9am-6pm PKT" },
@@ -99,6 +106,22 @@ function ContactPage() {
               {sending ? "Sending…" : (<>Send message <Send className="ml-2 h-4 w-4" /></>)}
             </Button>
           </form>
+        </div>
+      </section>
+
+      <section className="pb-24">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="overflow-hidden rounded-3xl border border-border shadow-elegant">
+            <iframe
+              title="ORCA BPO Islamabad — Blue Area location"
+              src="https://www.google.com/maps?q=Blue+Area,+Islamabad,+Pakistan&output=embed"
+              width="100%"
+              height="420"
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              className="block w-full border-0"
+            />
+          </div>
         </div>
       </section>
 

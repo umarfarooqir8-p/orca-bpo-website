@@ -39,11 +39,16 @@ export function SiteHeader() {
           ))}
         </nav>
 
-        <div className="hidden md:block">
-          <Button asChild size="sm" className="bg-gradient-accent text-accent-foreground shadow-glow hover:opacity-90">
+        <div className="hidden items-center gap-2 md:flex">
+          <Button asChild size="sm" variant="outline">
             <Link to="/contact">
               <Phone className="mr-2 h-4 w-4" /> Get a Quote
             </Link>
+          </Button>
+          <Button asChild size="sm" className="bg-gradient-accent text-accent-foreground shadow-glow hover:opacity-90">
+            <a href="https://orcabposervices.com" target="_blank" rel="noopener noreferrer">
+              Get a Consultation
+            </a>
           </Button>
         </div>
 
@@ -69,8 +74,13 @@ export function SiteHeader() {
                 {n.label}
               </Link>
             ))}
-            <Button asChild className="mt-2 bg-gradient-accent text-accent-foreground">
+            <Button asChild variant="outline" className="mt-2">
               <Link to="/contact" onClick={() => setOpen(false)}>Get a Quote</Link>
+            </Button>
+            <Button asChild className="bg-gradient-accent text-accent-foreground">
+              <a href="https://orcabposervices.com" target="_blank" rel="noopener noreferrer" onClick={() => setOpen(false)}>
+                Get a Consultation
+              </a>
             </Button>
           </div>
         </div>
