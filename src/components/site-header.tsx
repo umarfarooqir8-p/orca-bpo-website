@@ -4,10 +4,10 @@ import { Menu, X, Phone } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const nav = [
-  { to: "/", label: "Home" },
-  { to: "/services", label: "Services" },
-  { to: "/about", label: "About" },
-  { to: "/contact", label: "Contact" },
+  { to: "/", label: "Home", href: "https://orcabpo.com/" },
+  { to: "/services", label: "Services", href: "https://orcabpo.com/services.php" },
+  { to: "/about", label: "About", href: "https://orcabpo.com/" },
+  { to: "/contact", label: "Contact", href: null as string | null },
 ] as const;
 
 export function SiteHeader() {
@@ -26,17 +26,29 @@ export function SiteHeader() {
         </Link>
 
         <nav className="hidden items-center gap-8 md:flex">
-          {nav.map((n) => (
-            <Link
-              key={n.to}
-              to={n.to}
-              className="text-sm font-medium text-foreground/70 transition-colors hover:text-foreground"
-              activeProps={{ className: "text-foreground" }}
-              activeOptions={{ exact: n.to === "/" }}
-            >
-              {n.label}
-            </Link>
-          ))}
+          {nav.map((n) =>
+            n.href ? (
+              <a
+                key={n.label}
+                href={n.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-sm font-medium text-foreground/70 transition-colors hover:text-foreground"
+              >
+                {n.label}
+              </a>
+            ) : (
+              <Link
+                key={n.label}
+                to={n.to}
+                className="text-sm font-medium text-foreground/70 transition-colors hover:text-foreground"
+                activeProps={{ className: "text-foreground" }}
+                activeOptions={{ exact: n.to === "/" }}
+              >
+                {n.label}
+              </Link>
+            )
+          )}
         </nav>
 
         <div className="hidden items-center gap-2 md:flex">
