@@ -13,12 +13,12 @@ export const Route = createFileRoute("/")({
 });
 
 const services = [
-  { icon: Headphones, title: "Customer Support", desc: "24/7 omnichannel voice, chat and email support from trained professionals." },
-  { icon: Wrench, title: "Technical Support", desc: "Tier-1 to Tier-3 tech support ensuring fast resolution and high CSAT." },
-  { icon: FileStack, title: "Back Office", desc: "Data entry, document management and administrative workflows at scale." },
-  { icon: MessagesSquare, title: "Chat & Email", desc: "Real-time chat and responsive email support that keeps customers engaged." },
-  { icon: LineChart, title: "Digital Marketing", desc: "Data-driven SEO, PPC and content strategies that grow your presence." },
-  { icon: Users, title: "HR & Recruitment", desc: "End-to-end recruitment, onboarding and HR management outsourcing." },
+  { icon: Headphones, title: "Customer Support", desc: "24/7 omnichannel voice, chat and email support from trained professionals.", tint: "bg-sky-100 text-sky-700" },
+  { icon: Wrench, title: "Technical Support", desc: "Tier-1 to Tier-3 tech support ensuring fast resolution and high CSAT.", tint: "bg-amber-100 text-amber-700" },
+  { icon: FileStack, title: "Back Office", desc: "Data entry, document management and administrative workflows at scale.", tint: "bg-emerald-100 text-emerald-700" },
+  { icon: MessagesSquare, title: "Chat & Email", desc: "Real-time chat and responsive email support that keeps customers engaged.", tint: "bg-violet-100 text-violet-700" },
+  { icon: LineChart, title: "Digital Marketing", desc: "Data-driven SEO, PPC and content strategies that grow your presence.", tint: "bg-rose-100 text-rose-700" },
+  { icon: Users, title: "HR & Recruitment", desc: "End-to-end recruitment, onboarding and HR management outsourcing.", tint: "bg-teal-100 text-teal-700" },
 ];
 
 const whys = [
@@ -126,10 +126,9 @@ function HomePage() {
 
           <div className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {services.map((s) => (
-              <div key={s.title} className="group relative overflow-hidden rounded-2xl border border-border bg-card p-7 transition-all hover:-translate-y-1 hover:shadow-elegant">
-                <div className="absolute -right-8 -top-8 h-24 w-24 rounded-full bg-gradient-accent opacity-0 blur-2xl transition-opacity group-hover:opacity-30" />
+              <div key={s.title} className="group relative overflow-hidden rounded-2xl border-4 border-black bg-card p-7 shadow-[6px_6px_0_0_#000] transition-all hover:-translate-y-1 hover:shadow-[10px_10px_0_0_#000]">
                 <div className="relative">
-                  <div className="grid h-12 w-12 place-items-center rounded-xl bg-primary/5 text-primary">
+                  <div className={`grid h-12 w-12 place-items-center rounded-xl border-2 border-black ${s.tint}`}>
                     <s.icon className="h-6 w-6" />
                   </div>
                   <h3 className="mt-5 font-display text-xl font-semibold">{s.title}</h3>
