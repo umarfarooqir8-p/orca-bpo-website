@@ -81,34 +81,10 @@ function openNotepad(filePath: string) {
   }).unref();
 }
 
-function sheetsUrl() {
-  return process.env.VITE_GOOGLE_SHEETS_URL || process.env.GOOGLE_SHEETS_URL || "";
-}
-
-/** Server-side POST to Apps Script (avoids browser CORS / Failed to fetch). */
-async function forwardToGoogleSheet(payload: Record<string, string>) {
-  const url = sheetsUrl().trim();
-  if (!url) return { sent: false as const };
-
-  const res = await fetch(url, {
-    method: "POST",
-    headers: { "Content-Type": "text/plain;charset=utf-8" },
-    body: JSON.stringify(payload),
-    redirect: "follow",
-  });
-
-  if (!res.ok) {
-    const text = await res.text().catch(() => "");
-    throw new Error(`Google Sheet returned ${res.status}${text ? `: ${text.slice(0, 200)}` : ""}`);
-  }
-
-  return { sent: true as const };
-}
-
 /**
  * GET  /api/form-status → { ok, active }
  * POST /api/form-status → { active: boolean }
- * POST /api/contact     → Notepad + Google Sheet (if form active)
+ * POST /api/contact     → Notepad only (if form active)
  */
 export function contactNotepadPlugin(): Plugin {
   return {
@@ -180,15 +156,7 @@ export function contactNotepadPlugin(): Plugin {
           await appendFile(filePath, formatNote(payload), "utf8");
           openNotepad(filePath);
 
-          let sheetOk = false;
-          try {
-            const sheet = await forwardToGoogleSheet(payload);
-            sheetOk = sheet.sent;
-          } catch (err) {
-            console.error("[contact-notepad] Google Sheet forward failed:", err);
-          }
-
-          json(res, 200, { ok: true, sheet: sheetOk });
+          json(res, 200, { ok: true });
         } catch (err) {
           console.error("[contact-notepad]", err);
           json(res, 500, { ok: false, error: "Failed to save" });

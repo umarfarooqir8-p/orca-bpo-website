@@ -40,3 +40,5 @@ dist-ssr
 .tools
 
 .workspace/
+
+.notepad-watcher-state.json

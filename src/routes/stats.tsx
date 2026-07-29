@@ -111,7 +111,7 @@ function StatsPage() {
             </h1>
             <p className="mt-3 text-white/60">
               {localApi === false
-                ? "Visitor counts and form on/off only work on your laptop. On this public site the contact form stays on and saves to Google Sheets."
+                ? "Visitor counts and form on/off only work on your laptop. On this public site, contact messages go to Notepad when the receiver is running on your PC."
                 : "Counts people who open your site while the local server is running."}
             </p>
           </div>
@@ -140,9 +140,8 @@ function StatsPage() {
           {localApi === false ? (
             <div className="mb-6 rounded-2xl border border-amber-500/30 bg-amber-500/10 px-4 py-3 text-sm text-amber-100">
               You’re on the <strong>public</strong> site. Activate / Deactivate and visitor stats need{" "}
-              <code className="text-amber-50">localhost</code> (Desktop shortcut /{" "}
-              <code className="text-amber-50">npm run dev</code>). Your live Contact form is already on
-              and messages go to Google Sheets.
+              <code className="text-amber-50">localhost</code>. Contact messages go to{" "}
+              <strong>Notepad</strong> when <strong>ORCA Notepad Receiver</strong> is running on your PC.
             </div>
           ) : (
             error && (
@@ -160,7 +159,7 @@ function StatsPage() {
                 </div>
                 <h2 className="mt-2 font-display text-xl font-semibold">
                   {localApi === false
-                    ? "Always on (public site)"
+                    ? "Notepad only (public site)"
                     : formActive === null
                       ? "Status unknown"
                       : formActive
@@ -169,8 +168,8 @@ function StatsPage() {
                 </h2>
                 <p className="mt-2 max-w-xl text-sm text-white/55">
                   {localApi === false
-                    ? "On Lovable, messages save to your Google Sheet. Use Activate/Deactivate only when running the site on your laptop for Notepad."
-                    : "When active, Contact page submissions open in Notepad and save to your Google Sheet. Turn it off anytime to stop new messages."}
+                    ? "Google Sheets is disconnected on the live site. Messages open in Notepad on your PC when the receiver is running."
+                    : "When active, Contact page submissions open in Notepad. Turn it off anytime to stop new messages."}
                 </p>
               </div>
               <div className="flex flex-wrap gap-2">

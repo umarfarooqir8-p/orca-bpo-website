@@ -11,7 +11,6 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import { CONTACT, phoneHref } from "@/lib/contact-info";
-import { submitToGoogleSheet } from "@/lib/google-sheets";
 
 export const Route = createFileRoute("/contact")({
   head: () => ({
@@ -28,6 +27,31 @@ export const Route = createFileRoute("/contact")({
   component: ContactPage,
 });
 
+/** Resolve Notepad API: localhost, env, or public URL file on GitHub */
+async function notepadApiBase() {
+  const host = typeof window !== "undefined" ? window.location.hostname : "";
+  if (host === "localhost" || host === "127.0.0.1" || host.startsWith("192.168.")) {
+    return "";
+  }
+  const fromEnv = (import.meta.env.VITE_NOTEPAD_API_URL as string | undefined)?.trim();
+  if (fromEnv) return fromEnv.replace(/\/$/, "");
+
+  // Updated when you start ORCA Notepad on your PC (no Lovable republish needed)
+  try {
+    const res = await fetch(
+      "https://raw.githubusercontent.com/umarfarooqir8-p/orca-bpo-islamabad/main/notepad-public-url.txt?t=" +
+        Date.now(),
+    );
+    if (res.ok) {
+      const url = (await res.text()).trim().split(/\s+/)[0];
+      if (url.startsWith("http")) return url.replace(/\/$/, "");
+    }
+  } catch {
+    /* ignore */
+  }
+  return "";
+}
+
 function ContactPage() {
   const [sending, setSending] = useState(false);
   const [formActive, setFormActive] = useState<boolean | null>(null);
@@ -41,7 +65,6 @@ function ContactPage() {
         const data = (await res.json()) as { ok?: boolean; active?: boolean };
         if (!cancelled) setFormActive(Boolean(data.active));
       } catch {
-        // Public / Lovable host has no local API — keep form on
         if (!cancelled) setFormActive(true);
       }
     })();
@@ -64,37 +87,23 @@ function ContactPage() {
 
     setSending(true);
     try {
-      // Local PC: Notepad + Sheet via /api/contact
-      // Public site (Lovable): Sheet only via Apps Script
-      let usedLocalApi = false;
-      try {
-        const res = await fetch("/api/contact", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload),
-        });
-        if (res.ok) {
-          const data = (await res.json().catch(() => null)) as
-            | { ok?: boolean; sheet?: boolean; error?: string }
-            | null;
-          if (data?.ok) {
-            usedLocalApi = true;
-            toast.success(
-              data.sheet
-                ? "Sent! Saved to Notepad and your Google Sheet."
-                : "Sent! Saved to Notepad on this computer.",
-            );
-          }
-        }
-      } catch {
-        // fall through to Google Sheet
+      const base = await notepadApiBase();
+      const endpoint = `${base}/api/contact`;
+      const res = await fetch(endpoint, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      const data = (await res.json().catch(() => null)) as { ok?: boolean; error?: string } | null;
+      if (!res.ok || !data?.ok) {
+        throw new Error(
+          data?.error ||
+            (base
+              ? "Notepad receiver is offline. On your PC, start ORCA Notepad Receiver."
+              : "Couldn’t reach Notepad. Start ORCA Notepad Receiver on your PC."),
+        );
       }
-
-      if (!usedLocalApi) {
-        await submitToGoogleSheet(payload);
-        toast.success("Sent! Saved to your Google Sheet.");
-      }
-
+      toast.success("Sent! Saved to Notepad.");
       form.reset();
     } catch (err) {
       console.error(err);
@@ -185,16 +194,7 @@ function ContactPage() {
                 className="rounded-3xl border border-white/10 bg-[#0c1118] p-8 shadow-elegant"
               >
                 <p className="mb-5 rounded-lg border border-emerald-500/30 bg-emerald-500/10 px-3 py-2 text-xs text-emerald-200">
-                  Messages open in Notepad and are also saved to your{" "}
-                  <a
-                    href="https://docs.google.com/spreadsheets/d/1eplrU1eaYzIUN1za9liVdd8bcgUqxKHEJBLaEEaSQ8Q/edit?usp=sharing"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="underline hover:text-white"
-                  >
-                    Google Sheet
-                  </a>
-                  .
+                  Messages are saved to Notepad on the ORCA computer (receiver must be running).
                 </p>
                 <div className="grid gap-5 sm:grid-cols-2">
                   <div>
