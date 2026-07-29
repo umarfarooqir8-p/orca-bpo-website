@@ -31,14 +31,18 @@ function StatsPage() {
   const [error, setError] = useState("");
   const [formActive, setFormActive] = useState<boolean | null>(null);
   const [toggling, setToggling] = useState(false);
+  /** Vite local APIs exist only on npm run dev — not on Lovable public site */
+  const [localApi, setLocalApi] = useState<boolean | null>(null);
 
   async function loadFormStatus() {
     try {
       const res = await fetch("/api/form-status");
       const json = (await res.json()) as { ok?: boolean; active?: boolean; error?: string };
       if (!res.ok || !json.ok) throw new Error(json.error || "Failed to load form status");
+      setLocalApi(true);
       setFormActive(Boolean(json.active));
     } catch {
+      setLocalApi(false);
       setFormActive(null);
     }
   }
@@ -50,6 +54,7 @@ function StatsPage() {
       const res = await fetch("/api/stats");
       const json = (await res.json()) as StatsResponse;
       if (!res.ok || !json.ok) throw new Error(json.error || "Failed to load");
+      setLocalApi(true);
       setStats(json);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Couldn’t load stats");
@@ -60,6 +65,10 @@ function StatsPage() {
   }
 
   async function setFormOn(active: boolean) {
+    if (!localApi) {
+      toast.error("Activate/Deactivate only works on your laptop (localhost), not the public Lovable site.");
+      return;
+    }
     setToggling(true);
     try {
       const res = await fetch("/api/form-status", {
@@ -101,7 +110,9 @@ function StatsPage() {
               Visitor stats
             </h1>
             <p className="mt-3 text-white/60">
-              Counts people who open your site while the local server is running.
+              {localApi === false
+                ? "Visitor counts and form on/off only work on your laptop. On this public site the contact form stays on and saves to Google Sheets."
+                : "Counts people who open your site while the local server is running."}
             </p>
           </div>
           <div className="flex gap-2">
@@ -110,7 +121,7 @@ function StatsPage() {
               variant="outline"
               className="border-white/20 bg-transparent text-white hover:bg-white/10 hover:text-white"
               onClick={() => void load()}
-              disabled={loading}
+              disabled={loading || localApi === false}
             >
               <RefreshCw className={`mr-2 h-4 w-4 ${loading ? "animate-spin" : ""}`} />
               Refresh
@@ -126,10 +137,19 @@ function StatsPage() {
 
       <section className="py-12">
         <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
-          {error && (
-            <div className="mb-6 rounded-2xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-200">
-              {error}. Restart the dev server if you just added this feature.
+          {localApi === false ? (
+            <div className="mb-6 rounded-2xl border border-amber-500/30 bg-amber-500/10 px-4 py-3 text-sm text-amber-100">
+              You’re on the <strong>public</strong> site. Activate / Deactivate and visitor stats need{" "}
+              <code className="text-amber-50">localhost</code> (Desktop shortcut /{" "}
+              <code className="text-amber-50">npm run dev</code>). Your live Contact form is already on
+              and messages go to Google Sheets.
             </div>
+          ) : (
+            error && (
+              <div className="mb-6 rounded-2xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-200">
+                {error}. Restart the dev server if you just added this feature.
+              </div>
+            )
           )}
 
           <div className="mb-8 rounded-3xl border border-white/10 bg-[#0c1118] p-6 sm:p-8">
@@ -139,21 +159,24 @@ function StatsPage() {
                   <Power className="h-4 w-4 text-[#3b82f6]" /> Contact form
                 </div>
                 <h2 className="mt-2 font-display text-xl font-semibold">
-                  {formActive === null
-                    ? "Status unknown"
-                    : formActive
-                      ? "Form is active"
-                      : "Form is off"}
+                  {localApi === false
+                    ? "Always on (public site)"
+                    : formActive === null
+                      ? "Status unknown"
+                      : formActive
+                        ? "Form is active"
+                        : "Form is off"}
                 </h2>
                 <p className="mt-2 max-w-xl text-sm text-white/55">
-                  When active, Contact page submissions open in Notepad and save to your Google Sheet.
-                  Turn it off anytime to stop new messages.
+                  {localApi === false
+                    ? "On Lovable, messages save to your Google Sheet. Use Activate/Deactivate only when running the site on your laptop for Notepad."
+                    : "When active, Contact page submissions open in Notepad and save to your Google Sheet. Turn it off anytime to stop new messages."}
                 </p>
               </div>
               <div className="flex flex-wrap gap-2">
                 <Button
                   type="button"
-                  disabled={toggling || formActive === true}
+                  disabled={toggling || localApi === false || formActive === true}
                   className="bg-emerald-600 text-white hover:bg-emerald-500 disabled:opacity-40"
                   onClick={() => void setFormOn(true)}
                 >
@@ -162,7 +185,7 @@ function StatsPage() {
                 <Button
                   type="button"
                   variant="outline"
-                  disabled={toggling || formActive === false}
+                  disabled={toggling || localApi === false || formActive === false}
                   className="border-red-500/40 bg-transparent text-red-200 hover:bg-red-500/10 hover:text-red-100 disabled:opacity-40"
                   onClick={() => void setFormOn(false)}
                 >
